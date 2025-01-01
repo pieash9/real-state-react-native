@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import React from "react";
 import { StatusBar } from "react-native";
+import GlobalProvider from "@/lib/global-provider";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -26,9 +27,9 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <GlobalProvider>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
       <Stack screenOptions={{ headerShown: false }} />
-    </>
+    </GlobalProvider>
   );
 }

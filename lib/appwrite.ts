@@ -26,34 +26,27 @@ export async function login() {
       OAuthProvider.Google,
       redirectUri
     );
-
-    if (!response) {
-      throw new Error("Failed to login");
-    }
+    if (!response) throw new Error("Create OAuth2 token failed");
 
     const browserResult = await openAuthSessionAsync(
       response.toString(),
       redirectUri
     );
 
-    if (browserResult.type !== "success") throw new Error("Failed to login");
+    if (browserResult.type !== "success")
+      throw new Error("Create OAuth2 token failed");
 
     const url = new URL(browserResult.url);
-
     const secret = url.searchParams.get("secret")?.toString();
     const userId = url.searchParams.get("userId")?.toString();
-
-    if (!secret || !userId) {
-      throw new Error("Failed to login");
-    }
+    if (!secret || !userId) throw new Error("Create OAuth2 token failed");
 
     const session = await account.createSession(userId, secret);
-
-    if (!session) throw new Error("Failed to create session!");
+    if (!session) throw new Error("Failed to create session");
 
     return true;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 }
@@ -68,7 +61,7 @@ export async function logout() {
   }
 }
 
-export async function getUser() {
+export async function getCurrentUser() {
   try {
     const response = await account.get();
     if (response.$id) {
